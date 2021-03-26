@@ -3,9 +3,42 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
+const errorModalDiv = document.getElementById("modal");
+const errorMessageTextArea = document.getElementById("modal-message")
+const likeGlyphs = document.getElementsByClassName("like-glyph");
+hideErrorModal();
 
+for (const oneGlyph of likeGlyphs) {
+  oneGlyph.addEventListener('click', (event) => {
+    const heartGlyph = event.target
+    mimicServerCall()
+    .then(() => {
+      // heartGlyph.innerText = (heartGlyph.innerText === EMPTY_HEART) ? FULL_HEART : EMPTY_HEART;
+      changeGlyph(heartGlyph)
+    })
+    .catch(error => { 
+      if (error) {
+        errorDisplayWhenError(error)
+      }       
+    })
+   })
+}
 
+function errorDisplayWhenError(error) {
+  errorMessageTextArea.innerText = error
+  errorModalDiv.className = "";
+  setTimeout(hideErrorModal, 3000)
+}
 
+function hideErrorModal(){
+  errorModalDiv.className = "hidden";
+}
+function changeGlyph(heartGlyph) {
+  heartGlyph.innerText = (heartGlyph.innerText === EMPTY_HEART) ? FULL_HEART : EMPTY_HEART;
+  heartGlyph.className = (heartGlyph.className === "like-glyph activated-heart") ? "like-glyph" : "like-glyph activated-heart";
+}
+
+// ASK ABOUT SUCCESS STATUS?
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
